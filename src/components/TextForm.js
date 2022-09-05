@@ -7,12 +7,13 @@ export default function TextForm(props) {
   const [uniqueCount, setUniqueCount] = useState(0);
 
   const handleUpClick = () => {
-    console.log("Uppercase was clicked" + text);
+    props.showAlert("Message converted to uppercase", "success");
     let newText = text.toUpperCase();
     setText(newText);
   };
 
   const handledownClick = () => {
+    props.showAlert("Message converted to lowercase", "success");
     let newText = text.toLowerCase();
     setText(newText);
   };
@@ -23,11 +24,11 @@ export default function TextForm(props) {
   };
 
   const handleOnChange = (event) => {
-    console.log("Uppercase was Change");
     setText(event.target.value);
   };
 
   const handleCopy = () => {
+    props.showAlert("Your Text is Copied", "success");
     let text = document.getElementById("myBox");
     text.select();
     text.setSelectionRange(0, 1000000);
@@ -46,7 +47,6 @@ export default function TextForm(props) {
 
   const foundUniqWords = () => {
     let str = new Set(text.split(" "));
-    console.log(str.size);
     setUniqueCount(str.size);
   };
 
@@ -57,7 +57,10 @@ export default function TextForm(props) {
 
   return (
     <>
-      <div className="container">
+      <div
+        className="container"
+        style={{ color: props.mode === "dark" ? "white" : "black" }}
+      >
         <h1>{props.heading}</h1>
         <div className="mb-3">
           <textarea
@@ -66,6 +69,10 @@ export default function TextForm(props) {
             value={text}
             onChange={handleOnChange}
             rows="8"
+            style={{
+              backgroundColor: props.mode === "dark" ? "grey" : "white",
+              color: props.mode === "dark" ? "white" : "black",
+            }}
           />
         </div>
         <button className="btn btn-primary" onClick={handleUpClick}>
@@ -103,14 +110,21 @@ export default function TextForm(props) {
           Remove Extra Spaces
         </button>
       </div>
-      <div className="container my-2">
+      <div
+        className="container my-2"
+        style={{ color: props.mode === "dark" ? "white" : "black" }}
+      >
         <h3>Your text summary</h3>
         <p>
-          {text.split(" ").length} words and {text.length} characters
+          {text.split(" ").length - 1} words and {text.length} characters
         </p>
         <p>{0.008 * text.split(" ").length} Minutes to read</p>
         <h3>Preview</h3>
-        <p>{text}</p>
+        <p>
+          {text.length > 0
+            ? text
+            : "Enter something in the TextBox above to preview it here"}
+        </p>
         <h3>Charaters without space</h3>
         <p>{charcountWOspace}</p>
         <h3>Reverse String</h3>
